@@ -291,7 +291,7 @@ function paint(index) {
 var wId = "w";
 var index = 0;
 var startX = 0, startY = 0, realX = 0, startTime =0, endTime=0;
-var flag = false, dragging=false;
+var flag = false, dragging=false,onArea=false;;
 var retcLeft = "0px", retcTop = "0px", retcHeight = "0px", retcWidth = "0px", realLeft = "0px";
 var pNode = document.getElementById('editArea');
 //根据背景图确定宽高
@@ -314,12 +314,9 @@ document.onmousedown = function(e){
   startTime = new Date().getTime();
   if(e.target.className.match(/cover/)){
     if(e.target.className.match(/retc/)) {
-      // 允许拖动
+      // 允许删除
       dragging = true;
-      // 计算坐标差值
-      diffX = startX - e.target.offsetLeft;
-      diffY = startY - e.target.offsetTop;
-      //return false;
+      onArea = true;
     }else {
       try{
        var evt = window.event || e;
@@ -346,13 +343,13 @@ document.onmouseup = function(e){
  // 禁止拖动
  dragging = false;
  endTime = new Date().getTime();
-
  if(endTime - startTime > 500) {
    try{
      document.body.removeChild(_$(wId + index));
      var html = '<div class="retc" style="margin-left:'+retcLeft+';margin-top:'+retcTop+';width:'+retcWidth+'; height:'+retcHeight+'">';
+     html += '<div class="close"><img src="./images/close.png" onClick="removeArea($(this))"/></div>'
      html += '<div id="paintDiagramDiv'+index+'"style="width:100%;height:100%">';
-     html += '<div class="close"><img src="./images/close.png" onClick="removeArea($(this))"/></div></div>'
+     html += '</div>'
      //html += '<div id="paintDiagramDiv'+index+'" style="background-color: white; border: solid 1px black; width: 100%;height: 800px"></div>'
      // html += '<ul><li class="section" style="width:600px; height:400px;"><div class="pos">'
      // html += '<div class="tip"><span>区域宽：<div>1200</div></span><span>区域高：<div>350</div></span></div>'
@@ -371,10 +368,16 @@ document.onmouseup = function(e){
    }catch(e){
 
    }
-
  }
  flag = false;
 };
+document.onkeydown = function(event){
+  var e = event || window.event || arguments.callee.caller.arguments[0];
+    console.log(e.target)
+    if(e && e.keyCode==46){ // 按 Esc
+      //要做的事情
+    }
+}
 
 function showModal(e){
  $('.modal').fadeIn();
@@ -403,7 +406,7 @@ document.onmousemove = function(e){
 };
 
 function removeArea(e){
- e.parent().parent('.rect').remove();
+  e.parent().parent('.retc').hide();
 }
 
 function hideModal(e){

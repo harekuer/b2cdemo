@@ -3,7 +3,7 @@ html{color:#000;overflow-y:scoll;overflow:-moz-scrollbars-vertical}
 .div{position:absolute; border:2px dashed #4a9ce2; width:0px; height:0px;left:0px; top:0px; overflow:hidden;}
 #editArea{position: relative;width: 100%;margin: 0 auto;background: url("../images/banggood.png") no-repeat;background-size: 100% auto;}
 #editArea .retc{position:absolute; border:2px solid #edd404; overflow:hidden;}
-.retc .close {width: 70px;height: 70px;position: absolute;right:0;top:0;cursor: pointer;}
+.retc .close {width: 70px;height: 70px;position: absolute;right:0;top:0;cursor: pointer;z-index: 999;}
 .retc .close img{width: 25px;height: 25px;float: right;display: none;}
 .retc .close:hover img{display: block;}
 .retc ul{position: relative;}
