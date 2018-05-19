@@ -250,7 +250,8 @@ function paint(index) {
                 }
                },
               new go.Binding("text", "text"))),
-        "undoManager.isEnabled": true
+        "undoManager.isEnabled": true,
+        "toolManager.mouseWheelBehavior":go.ToolManager.WheelNone,//鼠标滚轮事件禁止
       });
 
   myDiagram.add(
