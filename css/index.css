@@ -1,8 +1,8 @@
 body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td{margin:0;padding:0}
 html{color:#000;overflow-y:scoll;overflow:-moz-scrollbars-vertical}
-.div{position:absolute; border:2px dashed #4a9ce2; width:0px; height:0px;left:0px; top:0px; overflow:hidden;}
+.div{position:absolute; border:3px dashed #4a9ce2; width:0px; height:0px;left:0px; top:0px; overflow:hidden;}
 #editArea{position: relative;width: 100%;margin: 0 auto;background: url("../images/banggood.png") no-repeat;background-size: 100% auto;}
-#editArea .retc{position:absolute; border:2px solid #edd404; overflow:hidden;}
+#editArea .retc{position:absolute; border:3px solid #edd404; overflow:hidden;}
 .retc .close {width: 70px;height: 70px;position: absolute;right:0;top:0;cursor: pointer;z-index: 999;}
 .retc .close img{width: 25px;height: 25px;float: right;display: none;}
 .retc .close:hover img{display: block;}
@@ -20,3 +20,5 @@ html{color:#000;overflow-y:scoll;overflow:-moz-scrollbars-vertical}
 .modalClose {width: 30px;height: 30px;position: absolute;right:0;top:0;cursor: pointer;padding: 5px 5px 0 0;z-index: 999;}
 .modalClose img{width: 25px;height: 25px;float: right;display: none;}
 .modalClose:hover img{display: block;}
+.hide{display: none}
+.show{display: block}

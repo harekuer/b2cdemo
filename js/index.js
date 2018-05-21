@@ -332,6 +332,7 @@ document.onmousedown = function(e){
        div.className = "div";
        div.style.marginLeft = startX + "px";
        div.style.marginTop = startY + "px";
+       div.style.display = "none";
        document.body.appendChild(div);
       }catch(e){
 
@@ -349,36 +350,21 @@ document.onmouseup = function(e){
      document.body.removeChild(_$(wId + index));
      var html = '<div class="retc" style="margin-left:'+retcLeft+';margin-top:'+retcTop+';width:'+retcWidth+'; height:'+retcHeight+'">';
      html += '<div class="close"><img src="./images/close.png" onClick="removeArea($(this))"/></div>'
-     html += '<div id="paintDiagramDiv'+index+'"style="width:100%;height:100%">';
+     html += '<div id="paintDiagramDiv'+index+'" class="paint-area show" style="width:100%;height:100%">';
      html += '</div>'
-     //html += '<div id="paintDiagramDiv'+index+'" style="background-color: white; border: solid 1px black; width: 100%;height: 800px"></div>'
-     // html += '<ul><li class="section" style="width:600px; height:400px;"><div class="pos">'
-     // html += '<div class="tip"><span>区域宽：<div>1200</div></span><span>区域高：<div>350</div></span></div>'
-     // html += '<div class="edit"><a href="javascript:;" onClick="showModal($(this))">点击编辑数据结构</a></div>'
-     // html += '</div></li></ul>'
-     // html += '<div class="modal">'
-     // html += '  <div style="width: 100%; display: flex; justify-content: space-between">'
-     // html += '    <div id="myPaletteDiv'+index+'" style="width: 100px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>'
-     // html += '    <div id="myDiagramDiv'+index+'" style="flex-grow: 1; height: 580px; border: solid 1px black"></div>'
-     // html += '  </div>'
-     // html += '  <div class="modalClose" onClick="hideModal($(this))"><img src="./images/close.png"/></div>'
-     // html += '</div>'
      html += '</div>'
-     $("#editArea").append(html)
+     $("#editArea").append(html);
      paint(index);
+     new ZResize({
+      stage: "#editArea", //舞台
+      item: '.retc', //可缩放的类名
+     });
    }catch(e){
 
    }
  }
  flag = false;
 };
-document.onkeydown = function(event){
-  var e = event || window.event || arguments.callee.caller.arguments[0];
-    console.log(e.target)
-    if(e && e.keyCode==46){ // 按 Esc
-      //要做的事情
-    }
-}
 
 function showModal(e){
  $('.modal').fadeIn();
@@ -400,6 +386,9 @@ document.onmousemove = function(e){
   _$(wId + index).style.marginTop = retcTop;
   _$(wId + index).style.width = retcWidth;
   _$(wId + index).style.height = retcHeight;
+  if(Math.abs(startX - evt.clientX - scrollLeft) > 0) {
+    _$(wId + index).style.display = 'block';
+  }
   }catch(e){
    //alert(e);
   }
