@@ -6,6 +6,10 @@
  var defaultOpts = {
   stage: document, //舞台
   item: 'resize-item', //可缩放的类名
+  left: 0,
+  top: 0,
+  boxWidth: 0,
+  boxHeight: 0,
  };
 
  /**
@@ -113,7 +117,7 @@
     //绑定触发事件
     self.bindTrigger($(this));
    });
-   self.bindHidePanel();
+   //self.bindHidePanel();
   },
   //控制点公共样式
   addHandlerCss: function(els) {
@@ -163,6 +167,15 @@
    var oleft = 0; //原始元素位置
    var otop = 0;
    var org = el.parent('div');
+   var leftMove = 0;
+   var rightMove = 0;
+   var topMove = 0;
+   var bottomMove = 0;
+   var minLeft = self.options.left-rightMove;
+   var minTop = self.options.top;
+   var minRight = el.width() - (self.options.left+self.options.boxWidth)
+   var minBottom = el.height() - (self.options.top+self.options.boxHeight)
+
 
    //东
    var emove = false;
@@ -273,7 +286,6 @@
      var x = (e.pageX - ox);
      el.css({
       width: ow - x,
-      // left: oleft + x
      });
      org.css({
       width: ow - x,
@@ -283,7 +295,6 @@
      var y = (e.pageY - oy);
      el.css({
       height: oh - y,
-      // top: otop + y
      });
      org.css({
       height: oh - y,
@@ -294,7 +305,6 @@
      var y = e.pageY - oy;
      el.css({
       height: oh - y,
-      // top: otop + y,
       width: ow + x
      });
      org.css({
@@ -307,9 +317,7 @@
      var y = e.pageY - oy;
      el.css({
       height: oh - y,
-      // top: otop + y,
       width: ow - x,
-      // left: oleft + x
      });
      org.css({
       height: oh - y,
@@ -333,7 +341,6 @@
      var y = e.pageY - oy;
      el.css({
       width: ow - x,
-      // left: oleft + x,
       height: oh + y
      });
      org.css({

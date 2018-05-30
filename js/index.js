@@ -29,16 +29,10 @@ function init(index) {
 
   function nodeStyle() {
     return [
-      // The Node.location comes from the "loc" property of the node data,
-      // converted by the Point.parse static method.
-      // If the Node.location is changed, it updates the "loc" property of the node data,
-      // converting back using the Point.stringify static method.
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
       {
         // the Node.location is at the center of each node
         locationSpot: go.Spot.Center,
-        //isShadowed: true,
-        //shadowColor: "#888",
         // handle mouse enter/leave events to show/hide the ports
         mouseEnter: function (e, obj) { showPorts(obj.part, true); },
         mouseLeave: function (e, obj) { showPorts(obj.part, false); }
@@ -46,10 +40,6 @@ function init(index) {
     ];
   }
 
-  // Define a function for creating a "port" that is normally transparent.
-  // The "name" is used as the GraphObject.portId, the "spot" is used to control how links connect
-  // and where the port is positioned on the node, and the boolean "output" and "input" arguments
-  // control whether the user can draw links from or to the port.
   function makePort(name, spot, output, input) {
     // the port is basically just a small circle that has a white stroke when it is made visible
     return objGo(go.Shape, "Circle",
@@ -228,7 +218,7 @@ function paint(index) {
   if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
   var objPaint = go.GraphObject.make;  // for conciseness in defining templates
 
-  myDiagram =
+  myDiagram2 =
     objPaint(go.Diagram, "paintDiagramDiv"+index,
       {
         // Define the template for Nodes, just some text inside a colored rectangle
@@ -254,20 +244,28 @@ function paint(index) {
         "toolManager.mouseWheelBehavior":go.ToolManager.WheelNone,//鼠标滚轮事件禁止
       });
 
-  myDiagram.add(
+  myDiagram2.add(
     objPaint(go.Part,
       { layerName: "Grid", location: new go.Point(0, 0) },
       objPaint(go.TextBlock, "",
         { stroke: "brown" })
     ));
 
-  // Add an instance of the custom tool defined in DragCreatingTool.js.
-  // This needs to be inserted before the standard DragSelectingTool,
-  // which is normally the third Tool in the ToolManager.mouseMoveTools list.
-  // Note that if you do not set the DragCreatingTool.delay, the default value will
-  // require a wait after the mouse down event.  Not waiting will allow the DragSelectingTool
-  // and the PanningTool to be able to run instead of the DragCreatingTool, depending on the delay.
-  myDiagram.toolManager.mouseMoveTools.insertAt(2,
+  myDiagram2.addDiagramListener("BackgroundDoubleClicked", function(e) {
+    var box = myDiagram2.documentBounds;
+    new ZResize({
+     stage: "#editArea", //舞台
+     item: '#retc' +index, //可缩放的类名
+     left: box.x,
+     top: box.y,
+     boxWidth: box.width,
+     boxHeight: box.height,
+    });
+    var pNode = $('#paintDiagramDiv'+index).addClass('hide').removeClass('show');
+    $('#paintDiagramDiv'+index).next('.resize-panel').addClass('show').removeClass('hide');
+  });
+
+  myDiagram2.toolManager.mouseMoveTools.insertAt(2,
     objPaint(DragCreatingTool,
       {
         isEnabled: true,  // disabled by the checkbox
@@ -285,14 +283,17 @@ function paint(index) {
           // call the base method to do normal behavior and return its result
           return DragCreatingTool.prototype.insertPart.call(this, bounds);
         }
-      }));
+      })
+    );
 }
+
 
 //--------------绘制容器图-----------------
 var wId = "w";
 var index = 0;
+var paintWidth=0, paintHeight=0;
 var startX = 0, startY = 0, realX = 0, startTime =0, endTime=0;
-var flag = false, dragging=false,onArea=false;;
+var flag = false, dragging=false,onArea=false;
 var retcLeft = "0px", retcTop = "0px", retcHeight = "0px", retcWidth = "0px", realLeft = "0px";
 var pNode = document.getElementById('editArea');
 //根据背景图确定宽高
@@ -348,17 +349,19 @@ document.onmouseup = function(e){
  if(endTime - startTime > 500) {
    try{
      document.body.removeChild(_$(wId + index));
-     var html = '<div class="retc" style="margin-left:'+retcLeft+';margin-top:'+retcTop+';width:'+retcWidth+'; height:'+retcHeight+'">';
+     var html = '<div class="retc" id="retc'+index+'" style="margin-left:'+retcLeft+';margin-top:'+retcTop+';width:'+retcWidth+'; height:'+retcHeight+'">';
      html += '<div class="close"><img src="./images/close.png" onClick="removeArea($(this))"/></div>'
      html += '<div id="paintDiagramDiv'+index+'" class="paint-area show" style="width:100%;height:100%">';
      html += '</div>'
      html += '</div>'
-     $("#editArea").append(html);
+     if(parseInt(retcWidth) >0 && parseInt(retcHeight) >0) {
+       $("#editArea").append(html);
+     }
      paint(index);
-     new ZResize({
-      stage: "#editArea", //舞台
-      item: '.retc', //可缩放的类名
-     });
+     // new ZResize({
+     //  stage: "#editArea", //舞台
+     //  item: '.retc', //可缩放的类名
+     // });
    }catch(e){
 
    }

@@ -75,7 +75,7 @@ DragCreatingTool.prototype.canStart = function() {
 
   // gotta have some node data that can be copied
   if (this.archetypeNodeData === null) return false;
-  
+
   var diagram = this.diagram;
   if (diagram === null) return false;
   // heed IsReadOnly & AllowInsert
