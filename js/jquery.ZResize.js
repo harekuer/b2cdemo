@@ -116,8 +116,10 @@
 
     //绑定触发事件
     self.bindTrigger($(this));
+    
+    self.bindHidePanel();
    });
-   //self.bindHidePanel();
+
   },
   //控制点公共样式
   addHandlerCss: function(els) {
@@ -167,11 +169,7 @@
    var oleft = 0; //原始元素位置
    var otop = 0;
    var org = el.parent('div');
-   var leftMove = 0;
-   var rightMove = 0;
-   var topMove = 0;
-   var bottomMove = 0;
-   var minLeft = self.options.left-rightMove;
+   var minLeft = self.options.left;
    var minTop = self.options.top;
    var minRight = el.width() - (self.options.left+self.options.boxWidth)
    var minBottom = el.height() - (self.options.top+self.options.boxHeight)
@@ -268,6 +266,9 @@
    $(self.options.stage).on('mousemove', function(e) {
     if(emove) {
      var x = (e.pageX - ox);
+     if(Number(x) < -minRight ){
+       return
+     }
      el.css({
       width: ow + x
      });
@@ -276,6 +277,9 @@
      });
     } else if(smove) {
      var y = (e.pageY - oy);
+     if(Number(y) < -minBottom ){
+       return
+     }
      el.css({
       height: oh + y
      });
@@ -284,6 +288,9 @@
      });
     } else if(wmove) {
      var x = (e.pageX - ox);
+     if(Number(x) > minLeft ){
+       return
+     }
      el.css({
       width: ow - x,
      });
@@ -293,6 +300,9 @@
      });
     } else if(nmove) {
      var y = (e.pageY - oy);
+     if(Number(y) > minTop ){
+       return
+     }
      el.css({
       height: oh - y,
      });
@@ -303,6 +313,9 @@
     } else if(nemove) {
      var x = e.pageX - ox;
      var y = e.pageY - oy;
+     if(Number(y) > minTop || Number(x) < -minRight){
+       return
+     }
      el.css({
       height: oh - y,
       width: ow + x
@@ -313,6 +326,9 @@
       width: ow + x
      });
     } else if(nwmove) {
+      if(Number(y) > minTop || Number(x) > minLeft){
+        return
+      }
      var x = e.pageX - ox;
      var y = e.pageY - oy;
      el.css({
@@ -328,6 +344,9 @@
     } else if(semove) {
      var x = e.pageX - ox;
      var y = e.pageY - oy;
+     if(Number(y) < -minBottom || Number(x) < -minRight){
+       return
+     }
      el.css({
       width: ow + x,
       height: oh + y
@@ -339,6 +358,9 @@
     } else if(swmove) {
      var x = e.pageX - ox;
      var y = e.pageY - oy;
+     if(Number(y) < -minBottom || Number(x) > minLeft){
+       return
+     }
      el.css({
       width: ow - x,
       height: oh + y
@@ -390,19 +412,15 @@
   /**
    * 点击舞台空闲区域 隐藏缩放面板
    */
-  // bindHidePanel: function(el) {
-  //  var stage = this.options.stage;
-  //  var item = this.options.item;
-  //  $(stage).bind('click', function(e) {
-  //    e.stopPropagation();
-  //   $(item).children('.resize-panel').css({
-  //    display: 'none'
-  //   });
-  //   $(item).children('.paint-area').css({
-  //    display: 'block'
-  //   });
-  //  })
-  // }
+  bindHidePanel: function(el) {
+   var item = this.options.item;
+   $(item).children('.resize-panel').bind('dbclick', function(e) {
+     console.log('aa')
+     e.stopPropagation();
+    $(this).removeClass('show').addClass('hide')
+    $(this).prev('.paint-area').removeClass('hide').addClass('show')
+   })
+  }
  }
 
  window.ZResize = ZResize;
