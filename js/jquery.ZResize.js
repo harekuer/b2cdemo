@@ -17,7 +17,9 @@
   */
  var ZResize = function(options) {
   this.options = $.extend({}, defaultOpts, options);
-  this.init();
+  if(options.item){
+    this.init();
+  }
  }
 
  ZResize.prototype = {
@@ -116,10 +118,8 @@
 
     //绑定触发事件
     self.bindTrigger($(this));
-    
-    self.bindHidePanel();
    });
-
+   self.bindHidePanel();
   },
   //控制点公共样式
   addHandlerCss: function(els) {
@@ -410,15 +410,17 @@
    })
   },
   /**
-   * 点击舞台空闲区域 隐藏缩放面板
+   * 双击蒙层，隐藏拖拽面板
    */
   bindHidePanel: function(el) {
    var item = this.options.item;
-   $(item).children('.resize-panel').bind('dbclick', function(e) {
-     console.log('aa')
+   $(item).children('.resize-panel').on('dbclick', function(e) {
      e.stopPropagation();
     $(this).removeClass('show').addClass('hide')
     $(this).prev('.paint-area').removeClass('hide').addClass('show')
+   })
+   $('.paint-area').on('dbclick',function(e) {
+     e.stopPropagation();
    })
   }
  }

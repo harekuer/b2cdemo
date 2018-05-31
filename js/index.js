@@ -254,8 +254,6 @@ function paint(index) {
   myDiagram2.addDiagramListener("BackgroundDoubleClicked", function(e) {
     var box = myDiagram2.documentBounds;
     new ZResize({
-     stage: "#editArea", //舞台
-     item: '#retc' +index, //可缩放的类名
      left: box.x,
      top: box.y,
      boxWidth: box.width,
@@ -358,10 +356,10 @@ document.onmouseup = function(e){
        $("#editArea").append(html);
      }
      paint(index);
-     // new ZResize({
-     //  stage: "#editArea", //舞台
-     //  item: '.retc', //可缩放的类名
-     // });
+     new ZResize({
+      stage: "#editArea", //舞台
+      item: '.retc', //可缩放的类名
+     });
    }catch(e){
 
    }
